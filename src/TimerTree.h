@@ -24,6 +24,8 @@ namespace Summer
 class Eventloop;
 class Timer;
 
+//获取当前时间
+int getNowtime();
 
 class TimerTree
 {
@@ -43,8 +45,6 @@ private:
     void addTimerInloop(Timer* ti, size_t id);
     void cancelTimerInloop(size_t id);
 
-    //获取当前时间
-    int getNowtime();
 
     typedef std::multiset<std::shared_ptr<Timer>>::iterator Timeriterator;
 

@@ -5,11 +5,9 @@
 #include<sys/time.h>
 #include<sys/timerfd.h>
 #include<functional>
-
+#include"Callback.h"
 namespace Summer
 {
-
-typedef std::function<void()> TimerCallback;
 
 class Timer
 {

@@ -92,7 +92,7 @@ void TimerTree::updateTimer(int now)
         timer_.erase(tm);
 }
 
-int TimerTree::getNowtime()
+int getNowtime()
 {
     struct timeval now;
     gettimeofday(&now, nullptr);
