@@ -9,10 +9,14 @@
 #include<sys/eventfd.h>
 #include<assert.h>
 #include<algorithm>
+#include"Timer.h"
 using namespace Summer;
 
 __thread Eventloop* t_loopInThisThread = 0; //线程局部存储
 
+/*
+wakeupfd 可以用eventfd或者socketpair都可以.只要是全双工通信的
+*/
 
 int createEventfd()
 {
@@ -52,6 +56,7 @@ Eventloop::Eventloop()
       iteration_(0),
       threadId_(Gettid()),
       Epoll_loop(new Epoll(this)),
+      timerTree_(new TimerTree(this)),
       wakeupFd_(createEventfd()),
       wakeupChannel_(new Channel(this, wakeupFd_)),
       currentChannel(NULL)
@@ -235,7 +240,27 @@ void Eventloop::doPendingFunctors()
     callPendingFunctors_ = false;
 }
 
+//定时类函数
+size_t Eventloop::runAfter(int timeout, const TimerCallback cb)
+{
+    int expire = getNowtime() + timeout;
+    Timer* t = new Timer(expire, 0, std::move(cb));
+    size_t id = timerTree_->addTimer(t);
+    return id;
+}
 
+size_t Eventloop::runEvery(int interval_time, const TimerCallback cb)
+{
+    int expire = getNowtime() + interval_time;
+    Timer* t = new Timer(expire, interval_time, std::move(cb));
+    size_t id = timerTree_->addTimer(t);
+    return id;
+}
+
+void Eventloop::cancelTime(size_t id)
+{
+    timerTree_->cancelTimer(id);
+}
 
 
 

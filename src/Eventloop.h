@@ -8,11 +8,12 @@
 #include<functional>
 #include<memory>
 #include<vector>
+#include"TimerTree.h"
+#include"Callback.h"
 
 namespace Summer
 {
 class Channel;
-//class IomultiplexingBase;
 class Epoll;
 
 class Eventloop : public noncopyable
@@ -22,7 +23,6 @@ public:
     ~Eventloop();
 
     typedef std::function<void()> Functor;
-
     //每个IO线程只能有一个Eventloop类
     void loop();
 
@@ -62,6 +62,10 @@ public:
 
     static Eventloop* getEventLoopOfCurrentThread();
 
+    //定时器相关函数
+    size_t runAfter(int timeout, const TimerCallback cb);
+    size_t runEvery(int interval_time, const TimerCallback cb);
+    void cancelTime(size_t id);
 private:  
     void abortNotInLoopThread();
     void handleRead(); //wake up
@@ -76,6 +80,7 @@ private:
 
     //由eventloop管理其生命周期
     std::unique_ptr<Epoll> Epoll_loop;
+    std::unique_ptr<TimerTree> timerTree_;
     int wakeupFd_;
     std::unique_ptr<Channel> wakeupChannel_;
     std::vector<Channel*> activeChannel;   //活动的事件集
