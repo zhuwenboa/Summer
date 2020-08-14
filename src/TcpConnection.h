@@ -61,7 +61,11 @@ public:
 
     Buffer* inputBuffer() {return &inputBuffer_;}
     Buffer* outputBuffer() { return &outputBuffer_;}
-    
+    //更新时间
+    void updateTime(int newTime = 30);
+
+    void handleTimeout();
+
 private:  
     enum State
     {
@@ -98,6 +102,7 @@ private:
     Buffer outputBuffer_;//写缓冲区
 
     int id_; //在TcpServer中connectionMap所对应的id号 
+    size_t timeId_; //定时器对应的id
 };
 } //namespace Summer
 

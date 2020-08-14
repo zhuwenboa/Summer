@@ -33,17 +33,20 @@ void TcpConnection::connectEstablished()
     loop_->assertInLoopThread();
     assert(state_ == Connecting);
     setState(Connected);
-    //channel_->tie(shared_from_this());
     channel_->enableReading();
     connectionCallback_(shared_from_this());
+    //加入定时器
+    timeId_ = loop_->runAfter(30, std::bind(&TcpConnection::handleTimeout, this));
 }
 
 void TcpConnection::handleRead()
 {
     loop_->assertInLoopThread();
-    ssize_t n = inputBuffer_.readFd(channel_->Fd());
+    ssize_t n = inputBuffer_.readFd(socket_->fd());
     if(n > 0)
     {
+        //更新定时器
+        updateTime();
         messageCallback_(shared_from_this(), &inputBuffer_);
     }
     //关闭连接
@@ -82,6 +85,7 @@ void TcpConnection::handleWrite()
                     //..关闭连接
                 }
             }
+            updateTime();
         }
         else 
         {
@@ -128,9 +132,10 @@ void TcpConnection::send(const char* message, size_t len)
         }
         else    
         {
-            //定义一个函数指针
+            //定义一个函数指针, 不能用std::bind, 因为send有重载函数，其不知道要用哪个函数。
             void (TcpConnection::*func)(const char* message, size_t len) = &TcpConnection::send;
             loop_->runInLoop(std::bind(func, this, message, len));
+            //loop_->runInLoop(std::bind(&TcpConnection::send, this, message, len));
         }
     }
 }
@@ -144,7 +149,6 @@ void TcpConnection::send(const void* message, int len)
 {
     send(reinterpret_cast<const char*>(message), static_cast<size_t>(len));
 }
-
 
 void TcpConnection::sendInloop(const char* data, size_t len)
 {
@@ -197,3 +201,19 @@ void TcpConnection::sendInloop(const char* data, size_t len)
     }
 }
 
+//在设置时间内该客户没有给服务器发送任何消息，则需要试探其是否还存在
+void TcpConnection::handleTimeout()
+{
+    std::cout << "定时函数运行\n";
+    //发送一个心跳包
+    std::string beat_ = "##alive?";
+    int len = 9;
+    send(beat_, len);
+}
+
+void TcpConnection::updateTime(int newTime)
+{
+    //删除之前的定时器
+    loop_->cancelTime(timeId_);
+    timeId_ = loop_->runAfter(newTime, std::bind(&TcpConnection::handleTimeout, this));
+}
