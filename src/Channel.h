@@ -97,8 +97,6 @@ private:
     int Call_events;      //回调事件 用来判断执行什么回调函数
     bool logHup_;
 
-    std::weak_ptr<void> tie_;
-    bool tied_;
     bool eventHandling_;
     bool addToLoop_;
 
@@ -107,8 +105,6 @@ private:
     EventCallback writeCallback;
     EventCallback closeCallback;
     EventCallback erroCallback;
-
-
 };
 
 

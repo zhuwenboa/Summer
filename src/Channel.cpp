@@ -16,7 +16,6 @@ Channel::Channel(Eventloop* loop, int fd)
     Call_events(0),
     index_(-1),
     logHup_(true),
-    tied_(false),
     eventHandling_(false),
     addToLoop_(false)
     {}
@@ -30,12 +29,6 @@ Channel::~Channel()
     {
         assert(!loop_->hasChannel(this));
     }    
-}
-
-void Channel::tie(const std::shared_ptr<void>& obj)
-{
-    tie_ = obj;
-    tied_ = true;
 }
 
 void Channel::update()
@@ -53,19 +46,7 @@ void Channel::reMove()
 
 void Channel::handleEvent()
 {
-    std::shared_ptr<void> guard;
-    if(tied_)
-    {
-        guard = tie_.lock();
-        if(guard)
-        {
-            handleEventDispenser();
-        }
-    }
-    else
-    {
-        handleEventDispenser();
-    }    
+    handleEventDispenser();
 }
 
 void Channel::handleEventDispenser()
