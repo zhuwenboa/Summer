@@ -31,8 +31,6 @@ TcpServer::TcpServer(Eventloop* loop, InetAddress& listenAddr, Option option)
           nexConnId_(1),
           threadPool_(new EventloopThreadPool(loop_))
 {
-     //acceptor_->setNewConnectionCallback(
-     //        std::bind(&TcpServer::newConnection, this, std::placeholders::_1, std::placeholders::_2));
      acceptor_->setNewConnectionCallback([this](int fd, InetAddress& peerAddr)
                                                 {this->newConnection(fd, peerAddr);});
 }
@@ -69,8 +67,7 @@ void TcpServer::start()
 void TcpServer::newConnection(int sockfd, InetAddress& peerAddr)
 {
      loop_->assertInLoopThread();
-     //Eventloop* ioLoop = threadPool->getNextLoop();
-     Eventloop* ioLoop = loop_;
+     Eventloop* ioLoop = threadPool_->getNextloop();
      int id = nexConnId_++;
      InetAddress localAddr(sockets::getLocalAddr(sockfd));
      TcpConnectionPtr conn(std::make_shared<TcpConnection>(ioLoop, sockfd, id, localAddr, peerAddr));
