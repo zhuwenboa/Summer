@@ -3,7 +3,7 @@
 #include"Eventloop.h"
 #include<sys/timerfd.h>
 #include<functional>
-
+#include<iostream>
 using namespace Summer;
 
 int create_timerfd()
@@ -13,6 +13,13 @@ int create_timerfd()
     return timerfd;
 }
 
+int Summer::getNowtime()
+{
+    struct timeval now;
+    gettimeofday(&now, nullptr);
+    int timenow = static_cast<int>(now.tv_sec);
+    return timenow;
+}
 
 TimerTree::TimerTree(Eventloop* loop)
     : loop_(loop),
@@ -47,7 +54,7 @@ void TimerTree::addTimerInloop(Timer* ti, size_t id)
     auto it = std::shared_ptr<Timer>(ti);
     timer_.insert(it);
     idMap_.insert({id, it});
-
+    std::cout << "定时事件成功添加\n";
 }
 
 void TimerTree::cancelTimer(size_t id)
@@ -92,21 +99,14 @@ void TimerTree::updateTimer(int now)
         timer_.erase(tm);
 }
 
-int getNowtime()
-{
-    struct timeval now;
-    gettimeofday(&now, nullptr);
-    int timenow = static_cast<int>(now.tv_sec);
-    return timenow;
-}
 
 
 void TimerTree::start()
 {
     struct itimerspec new_value;
-    new_value.it_value.tv_sec = 2;
+    new_value.it_value.tv_sec = 5;
     new_value.it_value.tv_nsec = 0;
-    new_value.it_interval.tv_sec = 2;
+    new_value.it_interval.tv_sec = 10;
     new_value.it_interval.tv_nsec = 0;
 
     //启动timerfd定时器
