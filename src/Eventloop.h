@@ -66,6 +66,8 @@ public:
     size_t runAfter(int timeout, const TimerCallback cb);
     size_t runEvery(int interval_time, const TimerCallback cb);
     void cancelTime(size_t id);
+    
+
 private:  
     void abortNotInLoopThread();
     void handleRead(); //wake up

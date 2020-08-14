@@ -10,6 +10,7 @@
 #include<assert.h>
 #include<algorithm>
 #include"Timer.h"
+#include"TimerTree.h"
 using namespace Summer;
 
 __thread Eventloop* t_loopInThisThread = 0; //线程局部存储
@@ -17,6 +18,8 @@ __thread Eventloop* t_loopInThisThread = 0; //线程局部存储
 /*
 wakeupfd 可以用eventfd或者socketpair都可以.只要是全双工通信的
 */
+
+extern int Summer::getNowtime();
 
 int createEventfd()
 {
@@ -87,7 +90,8 @@ Eventloop::~Eventloop()
 
 void Eventloop::loop()
 {
-    std::cout << "loop函数运行\n";
+    std::cout << Gettid() << " loop函数运行\n";
+    timerTree_->start();
     assert(!onloop_);
     //检查该线程是否有Eventloop对象
     assertInLoopThread();
@@ -148,7 +152,7 @@ void Eventloop::queueInLoop(Functor cb)
         pendingFunctors_.push_back(std::move(cb));
     }
     /*
-    如果不是当前IO线程调用queueInloop或者dopendingFunctors正在运行则需要唤醒
+    如果不是当前IO线程调用queueInloop或者阻塞在epoll_wait则需要唤醒
     */
     if(!isInLoopThread() || callPendingFunctors_)
     {
