@@ -85,7 +85,7 @@ void TcpConnection::handleWrite()
                     //..关闭连接
                 }
             }
-            updateTime();
+            //updateTime();
         }
         else 
         {
@@ -101,6 +101,8 @@ void TcpConnection::handleClose()
     setState(Disconnected);
     //删除所有channel关注的事件
     channel_->unableAll();
+    //删除对应的定时器
+    loop_->cancelTime(timeId_);
     closeCallback_(shared_from_this());
 }
 
@@ -135,7 +137,6 @@ void TcpConnection::send(const char* message, size_t len)
             //定义一个函数指针, 不能用std::bind, 因为send有重载函数，其不知道要用哪个函数。
             void (TcpConnection::*func)(const char* message, size_t len) = &TcpConnection::send;
             loop_->runInLoop(std::bind(func, this, message, len));
-            //loop_->runInLoop(std::bind(&TcpConnection::send, this, message, len));
         }
     }
 }
@@ -164,6 +165,7 @@ void TcpConnection::sendInloop(const char* data, size_t len)
     if(!channel_->isWriting() && outputBuffer_.readableBytes() == 0)
     {
         nwrite = sockets::write(channel_->Fd(), data, len);
+        updateTime();
         if(nwrite > 0)
         {
             remaining = len - nwrite;
@@ -208,7 +210,13 @@ void TcpConnection::handleTimeout()
     //发送一个心跳包
     std::string beat_ = "##alive?";
     int len = 9;
-    send(beat_, len);
+    if(loop_->isInLoopThread())
+    {
+        len = sockets::write(socket_->fd(), beat_.data(), len);
+        if(len <= 0)
+            handleClose();
+    }
+    //send(beat_, len);
 }
 
 void TcpConnection::updateTime(int newTime)
