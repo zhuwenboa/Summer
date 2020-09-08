@@ -72,6 +72,7 @@ private:
     void abortNotInLoopThread();
     void handleRead(); //wake up
     void doPendingFunctors();
+    
 
     bool onloop_;
     std::atomic<bool> quit_;

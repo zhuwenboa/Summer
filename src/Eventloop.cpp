@@ -156,7 +156,7 @@ void Eventloop::queueInLoop(Functor cb)
     */
     if(!isInLoopThread() || callPendingFunctors_)
     {
-        wakeUp();
+        wakeUp(); //wakeUp()函数不存在线程安全问题，所以可以直接调用
     }
 }
 
