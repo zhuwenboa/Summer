@@ -27,7 +27,6 @@ Acceptor::~Acceptor()
     acceptChannel_.unableAll();
     //将acceptChannel事件删除
     acceptChannel_.reMove();
-    //::close(idleFd_);
 }
 
 void Acceptor::listen()
