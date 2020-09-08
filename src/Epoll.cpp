@@ -7,11 +7,11 @@
 #include"Channel.h"
 using namespace Summer;
 
-namespace
+namespace Summer
 {
-    const int Knew = -1;
-    const int KAdded = 1;
-    const int KDeleted = 2;
+    extern const int Knew = -1;
+    extern const int KAdded = 1;
+    extern const int KDeleted = 2;
 }
 
 Epoll::Epoll(Eventloop* loop) 
