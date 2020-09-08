@@ -24,7 +24,7 @@ struct sockaddr_in* sockaddr_in_cast(struct sockaddr* addr)
 int sockets::createNonblockingOrdie(sa_family_t family)
 {
     //设置sockfd为非阻塞
-    int sockfd = ::socket(family, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
+    int sockfd = ::socket(family, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, 0);
     if(sockfd < 0)
     {
         //...
