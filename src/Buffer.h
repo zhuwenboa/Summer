@@ -8,6 +8,15 @@
 #include<string>
 namespace Summer
 {
+//消息类型
+enum Message_type
+{
+    MES,
+    CODE,
+    HEADER,
+    HEART 
+};
+
 class Buffer
 {
 public:  
@@ -118,6 +127,23 @@ public:
             append(extrabuf, n - writeable);
         }
         return n;
+    }
+    //解析消息类型
+    Message_type encodeBuf()
+    {
+        Message_type tp;
+        //...
+        switch (tp)
+        {
+            case MES:
+                return MES;
+            case CODE:  
+                return CODE;
+            case HEADER:  
+                return HEADER;
+            default:  
+                return HEART;
+        }
     }
 private:  
     char* begin()
