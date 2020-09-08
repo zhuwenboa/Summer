@@ -1,5 +1,5 @@
 #include "IomultiplexingBase.h"
-#include"Epoll.h"
+//#include"Epoll.h"
 #include"Channel.h"
 using namespace Summer;
 
@@ -13,6 +13,7 @@ bool IomultiplexingBase::hasChannel(Channel* a_channel) const
     std::map<int, Channel*>::const_iterator it = channelMap.find(a_channel->Fd());
     return it != channelMap.end() && it->second == a_channel;
 }
+/*
 IomultiplexingBase* IomultiplexingBase::GetNewIomultiplexing(unsigned int choice, Eventloop* loop)
 {
     if(choice == 1)
@@ -20,3 +21,4 @@ IomultiplexingBase* IomultiplexingBase::GetNewIomultiplexing(unsigned int choice
         return new Epoll(loop);
     }
 }
+*/
