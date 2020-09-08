@@ -9,12 +9,16 @@ const int Channel::S_ReadEvent = EPOLLIN | EPOLLPRI;
 const int Channel::S_WriteEvent = EPOLLOUT;
 const int Channel::S_NoEvent = 0;
 
+const int Knew = -1;
+const int KAdded = 1;
+const int KDeleted = 2;
+
 Channel::Channel(Eventloop* loop, int fd)
     : loop_(loop),
     fd_(fd),
     events_(0),
     Call_events(0),
-    index_(-1),
+    index_(Knew),
     logHup_(true),
     eventHandling_(false),
     addToLoop_(false)

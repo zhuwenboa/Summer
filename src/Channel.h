@@ -93,8 +93,8 @@ private:
     const int fd_;       //套接字描述符
     Eventloop* loop_;
     int index_;           //在poll(2)中数组的下标
-    int events_;           //当前channel关注的事件集
-    int Call_events;      //回调事件 用来判断执行什么回调函数
+    int events_;           //当前关注的事件
+    int Call_events;      //目前的活动事件
     bool logHup_;
 
     bool eventHandling_;
