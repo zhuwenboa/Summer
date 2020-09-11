@@ -32,7 +32,7 @@ public:
     void setReuseAddr(bool on);
     //设置是否可以重用port
     void setReuserPort(bool on);
-    //设置套接字是否Alive
+    //是否开启心跳
     void setKeepAlive(bool on);
 private:  
     const int sockfd_;

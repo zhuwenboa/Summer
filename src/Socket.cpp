@@ -53,3 +53,13 @@ void Socket::setReuserPort(bool on)
     }
 }
 
+void Socket::setKeepAlive(bool on)
+{
+    int optval = 1;
+    if(on)
+    {
+        int ret = ::setsockopt(sockfd_, SOL_SOCKET, SO_KEEPALIVE, &optval, 
+                               static_cast<socklen_t>(sizeof(optval)));
+    }
+}
+
