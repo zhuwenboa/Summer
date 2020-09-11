@@ -95,7 +95,7 @@ void TcpServer::reMoveConnectionInloop(const TcpConnectionPtr& conn)
           //...
      }
      Eventloop* ioLoop = conn->getLoop();
-     //调用TcpConnection::connectDestroyed函数终止对象
+     //调用TcpConnection::connectDestroyed函数终止对象,并且用queueInloop，会保证该对象的消息已经处理完毕才会释放
      //ioLoop不属于当前线程，所以用queueInLoop来确保线程安全
      ioLoop->queueInLoop(std::bind(&TcpConnection::connectDestroyed, conn));
 }
