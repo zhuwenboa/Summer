@@ -4,6 +4,7 @@
 #include<sys/timerfd.h>
 #include<functional>
 #include<iostream>
+#include "util.h"
 using namespace Summer;
 
 int create_timerfd()
@@ -12,7 +13,7 @@ int create_timerfd()
     assert(timerfd != -1);
     return timerfd;
 }
-
+/*
 int Summer::getNowtime()
 {
     struct timeval now;
@@ -20,6 +21,7 @@ int Summer::getNowtime()
     int timenow = static_cast<int>(now.tv_sec);
     return timenow;
 }
+*/
 
 TimerTree::TimerTree(Eventloop* loop)
     : loop_(loop),
