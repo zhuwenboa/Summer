@@ -15,6 +15,7 @@ class Channel;
 class Eventloop;
 class Socket;
 class TcpConnection;
+class Mysql_pool;
 
 class TcpConnection : noncopyable, public std::enable_shared_from_this<TcpConnection>
 {
