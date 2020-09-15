@@ -92,6 +92,8 @@ private:
     //pendingFunctors可以被其它线程访问，所以需要锁来保证线程安全
     mutable std::mutex mutex_;
     std::vector<Functor> pendingFunctors_;
+
+    //LockFreeQueue<Functor> que_; //无锁队列
 };
 
 

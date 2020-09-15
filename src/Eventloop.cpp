@@ -19,8 +19,6 @@ __thread Eventloop* t_loopInThisThread = 0; //线程局部存储
 wakeupfd 可以用eventfd或者socketpair都可以.只要是全双工通信的
 */
 
-extern int Summer::getNowtime();
-
 int createEventfd()
 {
     int evtfd = ::eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK);
@@ -147,6 +145,9 @@ void Eventloop::runInLoop(Functor cb)
 
 void Eventloop::queueInLoop(Functor cb)
 {
+#ifdef LOCKFREEQUEUE_H
+    que_.Enqueue(std::move(cb));
+#endif
     {
         std::lock_guard<std::mutex> lk(mutex_);
         pendingFunctors_.push_back(std::move(cb));
@@ -230,6 +231,21 @@ void Eventloop::handleRead()
 */
 void Eventloop::doPendingFunctors()
 {
+#ifdef LOCKFREEQUEUE_H
+    callPendingFunctors_ = true;
+    while(true)
+    {
+        Functor cb;
+        bool flag = que_.Try_Dequeue(cb);
+        if(flag && cb != NULL)
+        {
+            cb();
+        }
+        else 
+            break;
+    }
+#endif
+
     std::vector<Functor> functors;
     callPendingFunctors_ = true;
     {
