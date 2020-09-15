@@ -11,6 +11,8 @@
 namespace Summer 
 {
 
+class Eventloop;
+
 class Mysql_pool  
 {
 public:  
@@ -20,7 +22,7 @@ public:
     void DestroyPool(); //销毁所有连接
 
     //单例模式
-    static std::shared_ptr<Mysql_pool> GetInstance();
+    static std::shared_ptr<Mysql_pool> GetInstance(Eventloop* loop);
 
     void init(std::string url, std::string user, std::string pwd, 
               std::string dataBasename, int Port, int Maxconn); 
@@ -44,6 +46,7 @@ private:
     std::string m_Password; //登录数据库密码
     std::string m_DatabaseName; //使用数据库名
     static std::shared_ptr<Mysql_pool> connectPool;
+    static Eventloop* loop_;
 };
 
 } // namespace

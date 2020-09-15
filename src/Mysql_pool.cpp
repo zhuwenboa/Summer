@@ -1,9 +1,11 @@
 #include "Mysql_pool.h"
 #include<assert.h>
+#include"Eventloop.h"
 
 using namespace Summer;
 
 std::shared_ptr<Mysql_pool> Mysql_pool::connectPool = NULL;
+Eventloop* Mysql_pool::loop_ = NULL;
 
 Mysql_pool::Mysql_pool()
 {
@@ -18,11 +20,12 @@ Mysql_pool::~Mysql_pool()
         connectPool.reset();
 }
 
-std::shared_ptr<Mysql_pool> Mysql_pool::GetInstance()
+std::shared_ptr<Mysql_pool> Mysql_pool::GetInstance(Eventloop* loop)
 {
     if(connectPool.get() == NULL)
     {
         connectPool = std::make_shared<Mysql_pool>();
+        loop_ = loop;
     }
     return connectPool;
 }
