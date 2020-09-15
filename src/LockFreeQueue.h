@@ -4,6 +4,9 @@
 #include <memory>
 #include <vector>
 
+namespace Summer
+{
+
 template <typename T> 
 class LockFreeQueue 
 {
@@ -138,5 +141,5 @@ public:
     ::__sync_bool_compare_and_swap(&tail_, old_tail, enqueue_node);
   }
 };
-
+} //namespace
 #endif
