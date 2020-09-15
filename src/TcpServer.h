@@ -8,6 +8,7 @@ namespace Summer
 class Acceptor;
 class Eventloop;
 class EventloopThreadPool;
+class Mysql_pool;
 
 class TcpServer : noncopyable
 {
@@ -51,7 +52,8 @@ private:
     Eventloop* loop_;
     std::unique_ptr<Acceptor> acceptor_;
     std::shared_ptr<EventloopThreadPool> threadPool_;
-    
+    std::shared_ptr<Mysql_pool> connPool_;
+
     ConnectionCallback connectionCallback_;
     MessageCallback messageCallback_;
     WriteCompleteCallback writeCompleteCallback;

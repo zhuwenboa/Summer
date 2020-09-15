@@ -5,6 +5,7 @@
 #include"EventloopThreadPool.h"
 #include<iostream>
 #include<functional>
+#include"Mysql_pool.h"
 
 using namespace Summer;
 
@@ -33,6 +34,8 @@ TcpServer::TcpServer(Eventloop* loop, InetAddress& listenAddr, Option option)
 {
      acceptor_->setNewConnectionCallback([this](int fd, InetAddress& peerAddr)
                                                 {this->newConnection(fd, peerAddr);});
+     //初始化连接池
+     connPool_ = Mysql_pool::GetInstance(loop);
 }
 
 TcpServer::~TcpServer()
@@ -42,7 +45,6 @@ TcpServer::~TcpServer()
      {
           TcpConnectionPtr conn(item.second);
           //一定要在这一步进行reset，否则map一直持有TcpConnection对象，导致其不能正常析构，造成内存泄漏
-          //reset将引用计数-1
           item.second.reset();      
           //用runInLoop是因为每个连接可能对应不同的线程，确保线程安全     
           conn->getLoop()->runInLoop(std::bind(&TcpConnection::connectDestroyed, conn));
@@ -76,7 +78,6 @@ void TcpServer::newConnection(int sockfd, InetAddress& peerAddr)
      conn->setMessageCallback(messageCallback_);
      conn->setWriteCompleteCallback(writeCompleteCallback);
      conn->setCloseCallback(std::bind(&TcpServer::reMoveConnection, this, std::placeholders::_1));
-     //conn->setCloseCallback([this](const TcpConnectionPtr& conn){this->reMoveConnection(conn);});
      ioLoop->runInLoop(std::bind(&TcpConnection::connectEstablished, conn));
 }
           
