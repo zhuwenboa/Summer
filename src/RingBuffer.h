@@ -17,13 +17,13 @@ enum Message_type
     HEART 
 };
 
-class Buffer
+class RingBuffer
 {
 public:  
     //实际可使用空间
     static const size_t KInitialSize = 1024;
 
-    explicit Buffer(size_t initialSize = KInitialSize)
+    explicit RingBuffer(size_t initialSize = KInitialSize)
     : buffer_(initialSize),
       readIndex_(0),
       writeIndex_(0),
@@ -32,7 +32,7 @@ public:
         
     }
 
-    void swap(Buffer& rhs)
+    void swap(RingBuffer& rhs)
     {
         buffer_.swap(rhs.buffer_);
         std::swap(readIndex_, rhs.readIndex_);
