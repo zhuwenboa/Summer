@@ -158,7 +158,7 @@ private:
     //移动buffer_空间
     void makeSpace(size_t len)
     {
-        //可以写入区域的和前面空闲区域之和小于extrabuff的长度则需要扩容
+        //可以写入区域和前面空闲区域之和小于extrabuff的长度则需要扩容
         if (writeableBytes() + prependableBytes() < len + KReserve_space)
         {
           buffer_.resize(writeIndex_+len);
