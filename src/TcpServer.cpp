@@ -35,7 +35,7 @@ TcpServer::TcpServer(Eventloop* loop, InetAddress& listenAddr, Option option)
      acceptor_->setNewConnectionCallback([this](int fd, InetAddress& peerAddr)
                                                 {this->newConnection(fd, peerAddr);});
      //初始化连接池
-     connPool_ = Mysql_pool::GetInstance(loop);
+     //connPool_ = Mysql_pool::GetInstance(loop);
 }
 
 TcpServer::~TcpServer()
