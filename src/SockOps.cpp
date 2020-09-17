@@ -116,3 +116,13 @@ struct sockaddr_in sockets::getPeerAddr(int sockfd)
     }    
     return peerAddr;
 }
+
+int sockets::getSocketError(int sockfd)
+{
+    int optval;
+    socklen_t len = sizeof(optval);
+    if(getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &len) < 0)
+        return errno;
+    else 
+        return optval;
+}
