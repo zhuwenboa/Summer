@@ -56,7 +56,12 @@ public:
 
     //buffer中前段剩余空间
     size_t prependableBytes() const 
-    {return readIndex_;}
+    {
+        if(writeIndex_ >= readIndex_)
+            return readIndex_;
+        else 
+            return readIndex_ - writeIndex_;
+    }
 
     const char* peek() const 
     {
