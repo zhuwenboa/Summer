@@ -31,5 +31,6 @@
 2. 如果连接失败则进行连接重试。(加入到定时器中按照设置时间到时后进行重连)
 https://blog.csdn.net/weixin_42250655/article/details/102782401 关于非阻塞connect的博客
 
-
+##### 测试用例
+1. [Echo演示结果](https://github.com/zhuwenboa/Summer/tree/master/test/Echo)
 
