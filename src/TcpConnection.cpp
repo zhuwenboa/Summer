@@ -21,6 +21,7 @@ TcpConnection::TcpConnection(Eventloop* loop, int sockfd, int id,InetAddress& lo
     channel_->setWriteCallback(std::bind(&TcpConnection::handleWrite, this));
     channel_->setCloseCallback(std::bind(&TcpConnection::handleClose, this));
     channel_->setErroCallback(std::bind(&TcpConnection::handleError, this));
+    
     //开启心跳机制
     socket_->setKeepAlive(true);
 }
@@ -215,7 +216,7 @@ void TcpConnection::handleTimeout()
     if(loop_->isInLoopThread())
     {
         len = sockets::write(socket_->fd(), beat_.data(), len);
-        if(len <= 0)
+        if(len < 0)
         {
             handleClose();
             return;
