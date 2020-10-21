@@ -48,6 +48,7 @@ private:
     void getFilename();
     void creatFile();
     void rollFile();
+    void flush_time();
 
     const char *timeStr();
 
