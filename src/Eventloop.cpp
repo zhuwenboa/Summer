@@ -15,7 +15,7 @@ using namespace Summer;
 
 __thread Eventloop* t_loopInThisThread = 0; //线程局部存储
 
-/*
+/*TcpServer
 wakeupfd 可以用eventfd或者socketpair都可以.只要是全双工通信的
 */
 
