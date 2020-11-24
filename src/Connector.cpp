@@ -59,6 +59,7 @@ void Connector::stopInloop()
 //非阻塞connect
 void Connector::connect()
 {
+    //创建非阻塞套接字
     int sockfd = sockets::createNonblockingOrdie(C_addr_.family());
     int ret = sockets::connect(sockfd, C_addr_.getSockAddr());
     //判断是否连接成功
