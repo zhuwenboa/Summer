@@ -30,7 +30,7 @@ private:
     int sumThread;
     int next_;
     std::vector<std::unique_ptr<EventloopThread>> threads_;
-    std::vector<Eventloop*> loops_;
+    std::vector<Eventloop*> loops_; //保存的是栈上的对象所以不需要用智能指针管理
 };
 
 
