@@ -137,7 +137,9 @@ void TimerTree::tick()
         auto it = *timer_.begin();
         if(it->expire() > now)
             break;
-        it->timecb();
+        //将定时任务由eventloop执行
+        loop_->runInLoop(std::bind(&Timer::timecb, it));
+        //it->timecb();
         //如果没有要删除定时器，则将其加上当前时间继续加入到定时器中
         if(!it->isCancel())
             updateTimer(now);
