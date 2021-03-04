@@ -25,7 +25,7 @@ public:
     Eventloop* getNextloop();
 
 private:  
-    Eventloop* baseloop_;
+    Eventloop* baseloop_; //主线程
     bool start_;
     int sumThread;
     int next_;

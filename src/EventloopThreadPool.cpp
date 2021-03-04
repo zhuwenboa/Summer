@@ -24,6 +24,7 @@ void EventloopThreadPool::start()
     for(int i = 0; i < sumThread; ++i)
     {
         EventloopThread* t = new EventloopThread();
+        //用智能指针管理堆上的对象
         threads_.push_back(std::unique_ptr<EventloopThread>(t));
         loops_.push_back(t->getLoop());
     }
@@ -31,6 +32,7 @@ void EventloopThreadPool::start()
 
 Eventloop* EventloopThreadPool::getNextloop()
 {
+    //这一步确保如果是单线程可以正确返回loop对象。
     Eventloop* loop = baseloop_;
     if(!loops_.empty())
     {
