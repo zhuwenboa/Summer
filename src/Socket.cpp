@@ -63,3 +63,7 @@ void Socket::setKeepAlive(bool on)
     }
 }
 
+void Socket::shutdownWrite()
+{
+    sockets::shutdownwrite(sockfd_);
+}
