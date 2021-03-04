@@ -29,7 +29,7 @@ int createEventfd()
     }   
     return evtfd;     
 }
-
+//epoll阻塞等待的时间
 const int WaitTimes = 10000;
 
 class IgnoreSigPipe
