@@ -50,6 +50,7 @@ public:
     size_t prependableBytes() const 
     {return readIndex_;}
 
+    //返回当前缓冲区的首位置
     const char* peek() const 
     {
         return begin() + readIndex_;
@@ -62,10 +63,6 @@ public:
     void modifyWirte(size_t len)
     {writeIndex_ += len;}
 
-    const char* findCrlf() const 
-    {
-       return NULL;                
-    }
 
     //返回buffer中的所有数据
     std::string retireAllthing() 
@@ -181,7 +178,6 @@ private:
     size_t readIndex_;
     size_t writeIndex_;   
 
-    static const char Crlf[]; 
 };
 
 
