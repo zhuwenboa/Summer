@@ -7,7 +7,7 @@ Timer::Timer(int expire, int interval, const TimerCallback cb)
       interval_(interval),
       timecb_(cb)
 {
-
+    setTimecb(cb);
 }
 
 Timer::~Timer()
