@@ -66,11 +66,11 @@ void Connector::connect()
     int saveErro = (ret == 0) ? 0 : errno;
     switch (saveErro)
     {
-        case 0:
+        case 0: //连接建立成功
         case EINPROGRESS:
         case EINTR:  
-        case EISCONN: //连接已经建立成功
-            connecting(sockfd);
+        case EISCONN: 
+            connecting(sockfd); //关注可写可读事件，判断connect连接是否成功
             break;
         //出现以下错误进行重试
         case EAGAIN:  
