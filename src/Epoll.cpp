@@ -9,9 +9,9 @@ using namespace Summer;
 
 namespace Summer
 {
-    extern const int Knew = -1;
-    extern const int KAdded = 1;
-    extern const int KDeleted = 2;
+    extern const int Knew = -1;  //未进行注册到epoll中fd的状态
+    extern const int KAdded = 1; //已经注册并且有关注的事件集的状态
+    extern const int KDeleted = 2; //已经注册但并未关注任何事件集的状态
 }
 
 Epoll::Epoll(Eventloop* loop) 
