@@ -83,9 +83,10 @@ void TcpConnection::handleWrite()
                 {
                     loop_->queueInLoop(std::bind(writeCompleteCallback_, shared_from_this()));
                 }
+                //确保数据都发送完成在关闭连接
                 if(state_ == Disconnecting)
                 {
-                    //..关闭连接
+                    shutdownInloop();
                 }
             }
             //updateTime();
@@ -231,4 +232,26 @@ void TcpConnection::updateTime(int newTime)
     //删除之前的定时器
     loop_->cancelTime(timeId_);
     timeId_ = loop_->runAfter(newTime, std::bind(&TcpConnection::handleTimeout, this));
+}
+
+//主动发起关闭
+void TcpConnection::shutdown()
+{
+    if(state_ == Connected)
+    {
+        setState(Disconnecting);
+        loop_->runInLoop(std::bind(&TcpConnection::shutdownInloop, this));
+    }   
+}
+
+//半关闭确保可以将对方数据正确读取完整
+void TcpConnection::shutdownInloop()
+{
+    loop_->assertInLoopThread();
+    //是否关注可写事件
+    if(!channel_->isWriting())
+    {
+        //关闭写端
+        socket_->shutdownWrite();
+    }
 }

@@ -54,6 +54,8 @@ public:
     void connectEstablished();
     void connectDestroyed();
 
+    void shutdown();
+
     int fd() const 
     {return socket_->fd();}
 
@@ -81,6 +83,7 @@ private:
     void handleError();
     void sendInloop(const char* data, size_t len);
     void forceCloseInloop();
+    void shutdownInloop(); 
     void setState(State s) {state_ = s;}
 
     Eventloop* loop_;
