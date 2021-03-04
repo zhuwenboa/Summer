@@ -57,7 +57,6 @@ void TcpServer::SetThreadNum(int nums)
           threadPool_->setThreadnum(nums);
 }
 
-
 //能调用start函数肯定是主线程，也就是loop_所在的对象, 为了防止有其它线程调用start导致崩溃
 void TcpServer::start()
 {
