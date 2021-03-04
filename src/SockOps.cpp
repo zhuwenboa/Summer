@@ -93,6 +93,14 @@ void sockets::close(int sockfd)
     }
 }
 
+void sockets::shutdownwrite(int sockfd)
+{
+    if(::shutdown(sockfd, SHUT_WR) < 0)
+    {
+        //...
+    }
+}
+
 struct sockaddr_in sockets::getLocalAddr(int sockfd)
 {
     struct sockaddr_in localAddr;
