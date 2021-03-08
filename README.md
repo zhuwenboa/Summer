@@ -49,4 +49,6 @@ https://blog.csdn.net/weixin_42250655/article/details/102782401 关于非阻塞c
 
 ##### 测试用例
 1. [Echo演示结果](https://github.com/zhuwenboa/Summer/tree/master/test/Echo)
+2. [检测内存泄漏：](https://github.com/zhuwenboa/Summer/blob/master/test/Echo/Echo_valgring.png)
+
 
